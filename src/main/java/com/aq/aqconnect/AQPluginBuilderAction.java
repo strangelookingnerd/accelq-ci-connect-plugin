@@ -208,7 +208,7 @@ public class AQPluginBuilderAction extends Recorder implements SimpleBuildStep {
                     if (!jobStatus.equals(AQConstants.TEST_JOB_STATUS.SCHEDULED.getStatus().toUpperCase()) && !hasLoggedLinks) {
                         hasLoggedLinks = true;
                         out.println("Results Link: " + resultAccessURL);
-                        if (!StringUtils.isBlank(jobStatus)) {
+                        if (!StringUtils.isBlank(resultLinkPasscode)) {
                             out.println("Results Link Passcode: " + resultLinkPasscode);
                         }
                         out.println("Need to abort? Click on the link above, login to ACCELQ and abort the run.");
@@ -237,7 +237,7 @@ public class AQPluginBuilderAction extends Recorder implements SimpleBuildStep {
                     && !jobStatus.equals(AQConstants.TEST_JOB_STATUS.FAILED.getStatus().toUpperCase())
                     && !jobStatus.equals(AQConstants.TEST_JOB_STATUS.ERROR.getStatus().toUpperCase()));
             out.println("Results Link: " + resultAccessURL);
-            if (!StringUtils.isBlank(jobStatus)) {
+            if (!StringUtils.isBlank(resultLinkPasscode)) {
                 out.println("Results Link Passcode: " + resultLinkPasscode);
             }
             out.println();
