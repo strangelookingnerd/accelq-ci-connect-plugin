@@ -47,14 +47,6 @@ public class AQRestClient {
         return BASE_URL;
     }
 
-    public String getResultExternalAccessURL(String jobPid, String tenantCode) {
-        return String.format(getBaseURL() + AQConstants.EXT_JOB_WEB_LINK, tenantCode, jobPid);
-    }
-
-    public String getAbortURL(String jobPid) {
-        return String.format(getBaseURL() + AQConstants.JOB_WEB_LINK, jobPid);
-    }
-
     public void setUpBaseURL(String baseURL, String tenantCode) {
         BASE_URL = baseURL.charAt(baseURL.length() - 1) == '/'?(baseURL):(baseURL + '/');
         API_ENDPOINT =  BASE_URL + "awb/api/" + AQConstants.API_VERSION + "/" + tenantCode;
@@ -136,7 +128,7 @@ public class AQRestClient {
     public JSONObject triggerJob(String apiKey, String userId, String jobId, String runParam, int maxWaitTime) throws IOException,
             ParseException {
         CloseableHttpClient httpClient = getHttpsClient();
-        HttpPut httpPut = new HttpPut(API_ENDPOINT + "/jobs/" + jobId + "/trigger-ci-job");
+        HttpPut httpPut = new HttpPut(API_ENDPOINT + "/jobs/" + jobId + "/trigger-ci-job?passcode=true");
         httpPut.addHeader("User-Agent", AQConstants.USER_AGENT);
         httpPut.addHeader("API_KEY", apiKey);
         httpPut.addHeader("USER_ID", userId);
@@ -152,11 +144,9 @@ public class AQRestClient {
                 response.append(inputLine);
             }
             reader.close();
-            JSONArray jobInfo = (JSONArray) jsonParser.parse(response.toString());
+            JSONObject jobInfo = (JSONObject) jsonParser.parse(response.toString());
             if (httpResponse.getStatusLine().getStatusCode() == 200 || httpResponse.getStatusLine().getStatusCode() == 204) {
-                JSONObject obj = new JSONObject();
-                obj.put("pid", jobInfo.get(0));
-                return obj;
+                return jobInfo;
             } else {
                 // error object
                 return (JSONObject) jsonParser.parse(response.toString());                
